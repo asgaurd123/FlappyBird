@@ -20,7 +20,7 @@ clock = pygame.time.Clock()
 running = True
 
 # Load background image
-background = pygame.image.load('./flappy-bird-assets/sprites/background-day.png')
+background = pygame.image.load('./sprites/background-day.png')
 def rn():
     empt_list.clear()
     u=random.randrange(150,350)
@@ -30,8 +30,8 @@ def rn():
     
 empt_list=[]
 score_list=[]
-point_sound=pygame.mixer.Sound("./flappy-bird-assets/audio/point.wav")
-hit_sound=pygame.mixer.Sound("./flappy-bird-assets/audio/hit.wav")
+point_sound=pygame.mixer.Sound("./audio/point.wav")
+hit_sound=pygame.mixer.Sound("./audio/hit.wav")
 rn()
 
 score=0
@@ -40,7 +40,7 @@ score=0
 class Pipe(pygame.sprite.Sprite):
     def __init__(self,x,score=0,  y=empt_list[0]):
         super().__init__()
-        self.image = pygame.image.load('./flappy-bird-assets/sprites/pipe-green.png')
+        self.image = pygame.image.load('./sprites/pipe-green.png')
         self.rect = self.image.get_rect(topleft=(x, y))
         self.counter=0
         self.score=score
@@ -65,7 +65,7 @@ class Pipe(pygame.sprite.Sprite):
 class GameOver(pygame.sprite.Sprite):
     def __init__(self, x=270, y=200):
         super().__init__()
-        self.image = pygame.image.load('./flappy-bird-assets/sprites/gameover.png')
+        self.image = pygame.image.load('./sprites/gameover.png')
         self.rect = self.image.get_rect(topleft=(x, y))
         
         
@@ -96,14 +96,14 @@ class FlappyBird(pygame.sprite.Sprite):
         if pygame.key.get_pressed()[pygame.K_SPACE]:
             self.rect.y-=15
             
-        if self.image==pygame.image.load(r'./flappy-bird-assets/sprites/bluebird-upflap.png'):
-            self.image=pygame.image.load(r'./flappy-bird-assets/sprites/bluebird-midflap.png')
+        if self.image==pygame.image.load(r'./sprites/bluebird-upflap.png'):
+            self.image=pygame.image.load(r'./sprites/bluebird-midflap.png')
             
-        if self.image==pygame.image.load(r'./flappy-bird-assets/sprites/bluebird-midflap.png'):
-            self.image=pygame.image.load(r'./flappy-bird-assets/sprites/bluebird-downflap.png')
+        if self.image==pygame.image.load(r'./sprites/bluebird-midflap.png'):
+            self.image=pygame.image.load(r'./sprites/bluebird-downflap.png')
             
-        if self.image==pygame.image.load(r'./flappy-bird-assets/sprites/bluebird-downflap.png'):
-            self.image=pygame.image.load(r'./flappy-bird-assets/sprites/bluebird-midflap.png')
+        if self.image==pygame.image.load(r'./sprites/bluebird-downflap.png'):
+            self.image=pygame.image.load(r'./sprites/bluebird-midflap.png')
             
         if self.collider==True:
             pygame.mixer.Sound.play(hit_sound)
@@ -125,7 +125,7 @@ pipe_1_u = Pipe_Up(720)  # Position the pipe at the right edge of the screen
 pipe_2_u = Pipe_Up(480)  # Position the pipe at the right edge of the screen
 pipe_3_u = Pipe_Up(240) 
 
-bird=FlappyBird(50,200,pygame.image.load('./flappy-bird-assets/sprites/bluebird-midflap.png'))
+bird=FlappyBird(50,200,pygame.image.load('./sprites/bluebird-midflap.png'))
 
 
 
@@ -156,7 +156,7 @@ def game_over():
 
 
 score_file=['0','1','2','3','4','5','6','7','8','9']
-score_str='./flappy-bird-assets/sprites/0.png'
+score_str='./sprites/0.png'
 
 # Main game loop
 
@@ -221,11 +221,11 @@ while running:
             if i in score_file and bird.alive()==True:
                 index_=ac_score_lis.index(i)
                 
-                screen.blit(pygame.image.load('./flappy-bird-assets/sprites/'+str(i)+'.png'),(360+20*key,0))
+                screen.blit(pygame.image.load('./sprites/'+str(i)+'.png'),(360+20*key,0))
                 
             if bird.alive()==False:
                 
-                screen.blit(pygame.image.load('./flappy-bird-assets/sprites/'+str(i)+'.png'),(360+16*key,250))
+                screen.blit(pygame.image.load('./sprites/'+str(i)+'.png'),(360+16*key,250))
                 
     
 
