@@ -27,7 +27,6 @@ def rn():
     empt_list.append(u)
     return u
     
-    
 empt_list=[]
 score_list=[]
 point_sound=pygame.mixer.Sound("./audio/point.wav")
@@ -61,16 +60,13 @@ class Pipe(pygame.sprite.Sprite):
             
             score_list.append(self.score)
             pygame.mixer.Sound.play(point_sound)
-            
-        
+                  
 class GameOver(pygame.sprite.Sprite):
     def __init__(self, x=270, y=200):
         super().__init__()
         self.image = pygame.image.load('./sprites/gameover.png')
         self.rect = self.image.get_rect(topleft=(x, y))
-        
-        
-            
+                
 class Pipe_Up(Pipe):
     def __init__(self,x,y=random.randrange(200,300)-480):
         super().__init__(x)
@@ -79,20 +75,19 @@ class Pipe_Up(Pipe):
         
         self.rect.y=self.rect.y-480
         self.counter=self.counter-480
-
-
+        
 class FlappyBird(pygame.sprite.Sprite):
     
     def __init__(self, x, y,collider=False):
         super().__init__()
-        self.sprites=['./sprites/bluebird-upflap.png','./sprites/bluebird-midflap.png','./sprites/bluebird-downflap.png']
+        self.sprites=['./sprites/yellowbird-upflap.png','./sprites/yellowbird-midflap.png','./sprites/yellowbird-downflap.png']
         self.setPos=0
         
         self.image = pygame.image.load(self.sprites[self.setPos])
         self.rect = self.image.get_rect(topleft=(x, y))
         self.collider=collider
 
-    import time
+    
     def update(self):
         self.rect.y+=4
         self.setPos+=0.2
@@ -105,86 +100,98 @@ class FlappyBird(pygame.sprite.Sprite):
         if pygame.key.get_pressed()[pygame.K_SPACE]:
             self.rect.y-=15
             
-        if self.image==pygame.image.load(r'./sprites/bluebird-upflap.png'):
-            self.image=pygame.image.load(r'./sprites/bluebird-midflap.png')
-            
-        if self.image==pygame.image.load(r'./sprites/bluebird-midflap.png'):
-            self.image=pygame.image.load(r'./sprites/bluebird-downflap.png')
-            
-        if self.image==pygame.image.load(r'./sprites/bluebird-downflap.png'):
-            self.image=pygame.image.load(r'./sprites/bluebird-midflap.png')
             
         if self.collider==True:
             pygame.mixer.Sound.play(hit_sound)
         
         if self.rect.y>430:
         	self.kill()
+                 
+class StartScreen(pygame.sprite.Sprite):
+    def __init__(self,x,y):
+        super().__init__()
+        self.image=pygame.image.load('./sprites/message.png')
+        self.rect=self.image.get_rect(topleft=(x,y))
+        
+    def update(self):
+        if pygame.mouse.get_pressed()[0]:
+            self.kill()
 
-
+class Base(pygame.sprite.Sprite):
+    def __init__(self,x,y,counter=0):
+        super().__init__()
+        self.image=pygame.image.load('./sprites/base.png')
+        self.image=pygame.transform.scale(self.image,(720,240))
+        self.rect=self.image.get_rect(topleft=(x,y))
+        self.counter=counter
+    def update(self):
+        self.rect.x+=4
+        if self.rect.x>720+self.counter:
+            self.rect.x=0+self.counter
+            
+class Base_Animate(Base):
+    def __init__(self, x, y):
+        super().__init__(x, y)
+        
+        self.rect.x=self.rect.x-720
+        self.counter=self.counter-720
+        
+        
         
 # Create a sprite group and add a pipe
 
 all_sprites = pygame.sprite.Group()
 
-pipe_1 = Pipe(720,len(score_list))  # Position the pipe at the right edge of the screen
-pipe_2 = Pipe(480,len(score_list))  # Position the pipe at the right edge of the screen
-pipe_3 = Pipe(240,len(score_list))  # Position the pipe at the right edge of the screen
+pipe_1 = Pipe(720,len(score_list)) 
+pipe_2 = Pipe(480,len(score_list))  
+pipe_3 = Pipe(240,len(score_list)) 
 
-pipe_1_u = Pipe_Up(720)  # Position the pipe at the right edge of the screen
-pipe_2_u = Pipe_Up(480)  # Position the pipe at the right edge of the screen
+pipe_1_u = Pipe_Up(720) 
+pipe_2_u = Pipe_Up(480)
 pipe_3_u = Pipe_Up(240) 
 
 bird=FlappyBird(50,200)
+startingScreen=StartScreen(270,100)
+base_1=Base(0,420)
+base_2=Base_Animate(0,420)
 
 
 
 
+all_sprites.add(startingScreen)
+gameOver=False
 gameover=GameOver()
 
-all_sprites.add(bird)
-all_sprites.add(pipe_1)
-all_sprites.add(pipe_2)
-all_sprites.add(pipe_3)
 
-all_sprites.add(pipe_1_u)
-all_sprites.add(pipe_2_u)
-all_sprites.add(pipe_3_u)
+def gameScreen():
+    global gameOver
+    score_file=range(10)
 
-gameOver=False
+    score_str='./sprites/0.png'
+    content=''
+    # Main game loop
+    scoreboard=pygame.image.load('./sprites/scoreboard.png')
+    scoreboard=pygame.transform.scale(scoreboard,(200,100))
+    medal='./sprites/medal_bronze.png'
+   
+    all_sprites.add(bird)
+    all_sprites.add(pipe_1)
+    all_sprites.add(pipe_2)
+    all_sprites.add(pipe_3)
 
-def game_over():
-    all_sprites.remove(pipe_1)
-    all_sprites.remove(pipe_2)
-    all_sprites.remove(pipe_3)
+    all_sprites.add(pipe_1_u)
+    all_sprites.add(pipe_2_u)
+    all_sprites.add(pipe_3_u)
+    all_sprites.remove(startingScreen)
+    all_sprites.add(base_1)
+    all_sprites.add(base_2)
     
-    all_sprites.remove(pipe_1_u)
-    all_sprites.remove(pipe_2_u)
-    all_sprites.remove(pipe_3_u)
-    all_sprites.remove(bird)
     
     
-    all_sprites.add(gameover)
-    pygame.mixer.stop()
-
-
-score_file=range(10)
-
-score_str='./sprites/0.png'
-content=''
-# Main game loop
-scoreboard=pygame.image.load('./sprites/scoreboard.png')
-scoreboard=pygame.transform.scale(scoreboard,(200,100))
-medal='./sprites/medal_bronze.png'
-while running:
     
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:
-            running = False
-    
-    #Game Logic
 
     rn()
-    if pygame.sprite.collide_rect(pipe_1,bird) or pygame.sprite.collide_rect(pipe_2,bird) or pygame.sprite.collide_rect(pipe_3,bird) or  pygame.sprite.collide_rect(pipe_1_u,bird) or pygame.sprite.collide_rect(pipe_2_u,bird) or pygame.sprite.collide_rect(pipe_3_u,bird):
+    if pygame.sprite.collide_rect(pipe_1,bird) or pygame.sprite.collide_rect(pipe_2,bird) or pygame.sprite.collide_rect(pipe_3,bird) or  pygame.sprite.collide_rect(pipe_1_u,bird) or pygame.sprite.collide_rect(pipe_2_u,bird) or pygame.sprite.collide_rect(pipe_3_u,bird) and pygame.sprite.collide_rect(base_1,bird) :
         
         bird.kill()
         
@@ -204,10 +211,7 @@ while running:
         game_over()
        
     # Update sprites
-    all_sprites.update()
-    screen.blit(background, (0, 0))
-    screen.blit(background, (240, 0))
-    screen.blit(background, (480, 0))
+
     
     if gameOver==True:
         screen.blit(scoreboard,(260,280))
@@ -230,7 +234,7 @@ while running:
     for key,i in ac_dict.items():
         if bird.alive()==True:
                 
-            screen.blit(pygame.image.load('./sprites/'+str(i)+'.png'),(360+20*key,0))
+            screen.blit(pygame.image.load('./sprites/'+str(i)+'.png'),(360+20*key,20))
                 
         if bird.alive()==False:
 
@@ -282,15 +286,43 @@ while running:
         
     for key,item in high_score_dict.items():
         screen.blit(pygame.image.load('./sprites/number_middle_'+item+'.png'),(415+10*key,350))
-                    
-                
-                
-    
 
+def game_over():
+    all_sprites.remove(pipe_1)
+    all_sprites.remove(pipe_2)
+    all_sprites.remove(pipe_3)
     
+    all_sprites.remove(pipe_1_u)
+    all_sprites.remove(pipe_2_u)
+    all_sprites.remove(pipe_3_u)
+    all_sprites.remove(bird)
+    
+    all_sprites.remove(base_1)
+    all_sprites.remove(base_2)
+    
+    
+    all_sprites.add(gameover)
+    pygame.mixer.stop()
+
+while running:
+    
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            running = False
+    
+    #Game Logic
+
+  
+    screen.blit(background, (0, 0))
+    screen.blit(background, (240, 0))
+    screen.blit(background, (480, 0))
     all_sprites.draw(screen)
     all_sprites.update()
-
+    
+    if startingScreen.alive()==False:
+        gameScreen()
+      
+    
     # Update the display
     pygame.display.flip()
     pygame.display.update()
