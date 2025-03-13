@@ -8,7 +8,6 @@ pygame.font.init()
 pygame.mixer.init()
 
 
-
 my_font = pygame.font.SysFont('Comic Sans MS', 30)
 
 # Global variables
@@ -32,6 +31,7 @@ empt_list=[]
 score_list=[]
 point_sound=pygame.mixer.Sound("./audio/point.wav")
 hit_sound=pygame.mixer.Sound("./audio/hit.wav")
+die_sound=pygame.mixer.Sound("./audio/die.wav")
 rn()
 
 score=0
@@ -87,8 +87,7 @@ class FlappyBird(pygame.sprite.Sprite):
         self.image = image
         self.rect = self.image.get_rect(topleft=(x, y))
         self.collider=collider
-    def set_collide(self):
-        self.collider==True
+
     
     def update(self):
         self.rect.y+=4
@@ -141,6 +140,8 @@ all_sprites.add(pipe_1_u)
 all_sprites.add(pipe_2_u)
 all_sprites.add(pipe_3_u)
 
+gameOver=False
+
 def game_over():
     all_sprites.remove(pipe_1)
     all_sprites.remove(pipe_2)
@@ -153,6 +154,7 @@ def game_over():
     
     
     all_sprites.add(gameover)
+    pygame.mixer.stop()
 
 
 score_file=['0','1','2','3','4','5','6','7','8','9']
@@ -172,22 +174,38 @@ while running:
     rn()
     if pygame.sprite.collide_rect(pipe_1,bird):
         
-        game_over()
+        bird.kill()
         
     if pygame.sprite.collide_rect(pipe_2,bird):
-        game_over()
-    if pygame.sprite.collide_rect(pipe_3,bird):
-        game_over()
-    if pygame.sprite.collide_rect(pipe_1_u,bird):
-        game_over()
-    if pygame.sprite.collide_rect(pipe_2_u,bird):
-        game_over()
-    if pygame.sprite.collide_rect(pipe_3_u,bird):
-        game_over()
+        bird.kill()
         
+    if pygame.sprite.collide_rect(pipe_3,bird):
+        bird.kill()
+        
+    if pygame.sprite.collide_rect(pipe_1_u,bird):
+        bird.kill()
+        
+    if pygame.sprite.collide_rect(pipe_2_u,bird):
+        bird.kill()
+        
+    if pygame.sprite.collide_rect(pipe_3_u,bird):
+       bird.kill()
+        
+    import time
     
-    if bird.alive()==False:
+    if bird.alive()==False and gameOver==False:
+       pygame.mixer.Sound.play(hit_sound)
+       gameOver=True
+       time.sleep(1)
+       
+       pygame.mixer.Sound.play(die_sound)
+       time.sleep(1)
+       
+       
        game_over()
+    if bird.alive()==False and gameOver==True:
+        game_over()
+       
        
     
 
