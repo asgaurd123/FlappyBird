@@ -186,9 +186,6 @@ def gameScreen():
     all_sprites.add(base_1)
     all_sprites.add(base_2)
     
-    
-    
-    
 
     rn()
     if pygame.sprite.collide_rect(pipe_1,bird) or pygame.sprite.collide_rect(pipe_2,bird) or pygame.sprite.collide_rect(pipe_3,bird) or  pygame.sprite.collide_rect(pipe_1_u,bird) or pygame.sprite.collide_rect(pipe_2_u,bird) or pygame.sprite.collide_rect(pipe_3_u,bird) and pygame.sprite.collide_rect(base_1,bird) :
@@ -252,12 +249,9 @@ def gameScreen():
             if int(len(score_list)/2)>=20 and int(len(score_list)/2)<30:
                 medal='./sprites/medal_gold.png'
                 
-
-                
             if int(len(score_list)/2)>30:
                 medal='./sprites/medal_bronze.png'
-                
-
+            
             screen.blit(pygame.image.load('./sprites/number_middle_'+str(i)+'.png'),(415+10*key,310))
             medal_sprite=pygame.image.load(medal)
             medal_sprite=pygame.transform.scale(medal_sprite,(36,36))
