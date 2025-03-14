@@ -155,9 +155,6 @@ startingScreen=StartScreen(270,100)
 base_1=Base(0,420)
 base_2=Base_Animate(0,420)
 
-
-
-
 all_sprites.add(startingScreen)
 gameOver=False
 gameover=GameOver()
@@ -186,9 +183,12 @@ def gameScreen():
     all_sprites.add(base_1)
     all_sprites.add(base_2)
     
+    
+    
+    
 
     rn()
-    if pygame.sprite.collide_rect(pipe_1,bird) or pygame.sprite.collide_rect(pipe_2,bird) or pygame.sprite.collide_rect(pipe_3,bird) or  pygame.sprite.collide_rect(pipe_1_u,bird) or pygame.sprite.collide_rect(pipe_2_u,bird) or pygame.sprite.collide_rect(pipe_3_u,bird) and pygame.sprite.collide_rect(base_1,bird) :
+    if pygame.sprite.collide_rect(pipe_1,bird) or pygame.sprite.collide_rect(pipe_2,bird) or pygame.sprite.collide_rect(pipe_3,bird) or  pygame.sprite.collide_rect(pipe_1_u,bird) or pygame.sprite.collide_rect(pipe_2_u,bird) or pygame.sprite.collide_rect(pipe_3_u,bird) or pygame.sprite.collide_rect(base_1,bird) or pygame.sprite.collide_rect(base_2,bird):
         
         bird.kill()
         
@@ -231,7 +231,7 @@ def gameScreen():
     for key,i in ac_dict.items():
         if bird.alive()==True:
                 
-            screen.blit(pygame.image.load('./sprites/'+str(i)+'.png'),(360+20*key,20))
+            screen.blit(pygame.image.load('./sprites/'+str(i)+'.png'),(360+20*key,0))
                 
         if bird.alive()==False:
 
@@ -249,9 +249,12 @@ def gameScreen():
             if int(len(score_list)/2)>=20 and int(len(score_list)/2)<30:
                 medal='./sprites/medal_gold.png'
                 
+
+                
             if int(len(score_list)/2)>30:
                 medal='./sprites/medal_bronze.png'
-            
+                
+
             screen.blit(pygame.image.load('./sprites/number_middle_'+str(i)+'.png'),(415+10*key,310))
             medal_sprite=pygame.image.load(medal)
             medal_sprite=pygame.transform.scale(medal_sprite,(36,36))
@@ -324,7 +327,6 @@ while running:
     # Limit the frame rate to 60 FPS
     clock.tick(50)
     
-
 # Quit Pygame
 pygame.quit()
 sys.exit()
